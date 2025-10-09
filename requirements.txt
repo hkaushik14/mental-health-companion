@@ -3,4 +3,3 @@ google-generativeai
 textblob
 python-dotenv
 streamlit-chat
-PyMuPDF

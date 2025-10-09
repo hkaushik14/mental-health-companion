@@ -9,12 +9,28 @@ from exercise import RelaxationExercises, get_relaxation_tips
 from prompt import PromptBuilder, QUICK_RESPONSES, get_motivational_quote
 from sentiment import SentimentAnalyzer
 
+#streamlit lite api
+# Safe way to access your Gemini API key from Streamlit secrets
+import requests
+import json
+API_KEY = st.secrets["GEMINI_API_KEY"]
 
-# ✅ Initialize helper classes
-sentiment_analyzer = SentimentAnalyzer()
-prompt_builder = PromptBuilder()
-relaxation_exercises = RelaxationExercises()
+# Set up headers for API call
+headers = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json"
+}
 
+# Example request to Gemini endpoint
+url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+
+data = {
+    "contents": [{"parts": [{"text": "Hello Gemini!"}]}]
+}
+
+response = requests.post(url, headers=headers, json=data)
+
+st.write(response.json())
 
 # Load environment variables from .env file
 load_dotenv()

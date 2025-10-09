@@ -21,6 +21,10 @@ The Mental Health Companion Chatbot is a supportive AI-powered application desig
 * **TextBlob** for sentiment analysis
 * **dotenv** for environment variable management
 
+## Sreenshot
+
+
+
 ## Project Structure
 
 ```

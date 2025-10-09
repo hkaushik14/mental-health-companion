@@ -128,7 +128,7 @@ This is a safe space where you can share what's on your mind. Whether you're fee
 How are you feeling today?"""
 
 
-# Pre-defined quick responses
+
 QUICK_RESPONSES = {
     'greeting': [
         "Hello! How are you feeling today?",

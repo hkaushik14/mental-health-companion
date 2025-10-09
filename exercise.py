@@ -73,11 +73,11 @@ class RelaxationExercises:
     def get_exercise_by_mood(self, mood: str) -> Dict:
         """Get appropriate exercise based on mood"""
         if mood in ['stressed', 'anxious']:
-            return self.breathing_exercises[0]  # 4-7-8 breathing
+            return self.breathing_exercises[0]  
         elif mood == 'angry':
-            return self.breathing_exercises[1]  # Box breathing
+            return self.breathing_exercises[1]  
         else:
-            return self.breathing_exercises[2]  # Deep breathing
+            return self.breathing_exercises[2]  
     
     def get_random_exercise(self) -> Dict:
         """Get a random breathing exercise"""

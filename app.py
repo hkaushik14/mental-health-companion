@@ -32,7 +32,7 @@ from sentiment import SentimentAnalyzer
 
 # st.write(response.json())
 
-# ✅ Initialize helper classes
+
 sentiment_analyzer = SentimentAnalyzer()
 prompt_builder = PromptBuilder()
 relaxation_exercises = RelaxationExercises()

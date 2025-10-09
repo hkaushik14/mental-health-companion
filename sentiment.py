@@ -52,12 +52,12 @@ class SentimentAnalyzer:
         """
         text_lower = text.lower()
         
-        # Keyword-based detection (priority)
+       
         for mood, keywords in self.mood_keywords.items():
             if any(keyword in text_lower for keyword in keywords):
                 return mood, self.mood_emojis[mood], self._get_polarity(text)
         
-        # TextBlob sentiment analysis (fallback)
+        
         polarity = self._get_polarity(text)
         
         if polarity < -0.5:
@@ -103,7 +103,7 @@ class SentimentAnalyzer:
         return any(keyword in text_lower for keyword in crisis_keywords)
 
 
-# Helper function for direct use
+
 def analyze_sentiment(text: str) -> Tuple[str, str]:
     """
     Quick sentiment analysis function

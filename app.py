@@ -9,40 +9,42 @@ from exercise import RelaxationExercises, get_relaxation_tips
 from prompt import PromptBuilder, QUICK_RESPONSES, get_motivational_quote
 from sentiment import SentimentAnalyzer
 
-#streamlit lite api
-# Safe way to access your Gemini API key from Streamlit secrets
-import requests
-import json
-API_KEY = st.secrets["GEMINI_API_KEY"]
+# #streamlit lite api
+# # Safe way to access your Gemini API key from Streamlit secrets
+# import requests
+# import json
+# API_KEY = st.secrets["GEMINI_API_KEY"]
 
-# Set up headers for API call
-headers = {
-    "Authorization": f"Bearer {API_KEY}",
-    "Content-Type": "application/json"
-}
+# # Set up headers for API call
+# headers = {
+#     "Authorization": f"Bearer {API_KEY}",
+#     "Content-Type": "application/json"
+# }
 
-# Example request to Gemini endpoint
-url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+# # Example request to Gemini endpoint
+# url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
 
-data = {
-    "contents": [{"parts": [{"text": "Hello Gemini!"}]}]
-}
+# data = {
+#     "contents": [{"parts": [{"text": "Hello Gemini!"}]}]
+# }
 
-response = requests.post(url, headers=headers, json=data)
+# response = requests.post(url, headers=headers, json=data)
 
-st.write(response.json())
+# st.write(response.json())
 
-# Load environment variables from .env file
+# ✅ Initialize helper classes
+sentiment_analyzer = SentimentAnalyzer()
+prompt_builder = PromptBuilder()
+relaxation_exercises = RelaxationExercises()
+
 load_dotenv()
-
-# Page config
 st.set_page_config(
     page_title="Mental Health Companion",
     page_icon="🧘",
     layout="centered"
 )
 
-# Custom CSS for calming design
+
 st.markdown("""
     <style>
     .stApp {
@@ -66,9 +68,9 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Initialize Gemini
+
 if "gemini_configured" not in st.session_state:
-    # Load API key from environment variable
+    
     api_key = os.getenv("GEMINI_API_KEY")
     
     if not api_key:
@@ -79,20 +81,20 @@ if "gemini_configured" not in st.session_state:
     st.session_state.gemini_configured = True
     st.session_state.model = genai.GenerativeModel('gemini-2.5-flash')
 
-# Initialize chat history
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Initialize mood history
+
 if "mood_history" not in st.session_state:
     st.session_state.mood_history = []
 
-# Functions
+
 def analyze_sentiment(text):
     """Sentiment analysis using TextBlob"""
     text_lower = text.lower()
     
-    # Keywords-based detection (priority)
+   
     mood_keywords = {
         'stressed': ['stress', 'stressed', 'pressure', 'overwhelmed', 'exam', 'anxious', 'anxiety', 'deadline'],
         'sad': ['sad', 'depressed', 'lonely', 'unhappy', 'cry', 'crying', 'hurt', 'pain', 'down'],
@@ -108,12 +110,12 @@ def analyze_sentiment(text):
         'neutral': '😐'
     }
     
-    # Check keywords first
+   
     for mood, keywords in mood_keywords.items():
         if any(keyword in text_lower for keyword in keywords):
             return mood, mood_emojis[mood]
     
-    # Fallback to TextBlob sentiment
+    
     try:
         blob = TextBlob(text)
         polarity = blob.sentiment.polarity
@@ -175,17 +177,17 @@ def generate_response(user_message, mood, chat_history=None):
     if chat_history is None:
         chat_history = st.session_state.get("messages", [])
 
-    # Check for crisis first
+    
     if sentiment_analyzer.is_crisis(user_message):
         return prompt_builder.get_crisis_response()
     
-    # Build prompt using PromptBuilder
+   
     full_prompt = prompt_builder.build_prompt(user_message, mood, chat_history)
     
     try:
         response = st.session_state.model.generate_content(full_prompt)
         
-        # Safely extract the response text (handles all Gemini output types)
+        
         if hasattr(response, "text") and response.text:
             return response.text
         elif hasattr(response, "candidates") and response.candidates:
@@ -200,7 +202,7 @@ def generate_response(user_message, mood, chat_history=None):
 
 
 
-# Sidebar
+
 with st.sidebar:
     st.title("🧘 Your Wellness Space")
     
@@ -214,24 +216,24 @@ with st.sidebar:
     
     st.divider()
     
-    # Quick breathing exercise
+    
     st.subheader("🌬️ Quick Calm")
     if st.button("Start Breathing Exercise"):
         progress_text = st.empty()
         progress_bar = st.progress(0)
         
-        # Breathe in
+       
         progress_text.info("🌬️ Breathe in...")
         for i in range(4):
             progress_bar.progress((i + 1) * 25)
             time.sleep(1)
         
-        # Hold
+       
         progress_text.warning("⏸️ Hold...")
         for i in range(7):
             time.sleep(1)
         
-        # Breathe out
+        
         progress_text.success("💨 Breathe out...")
         for i in range(8):
             progress_bar.progress(100 - (i * 12))
@@ -242,7 +244,7 @@ with st.sidebar:
     
     st.divider()
     
-    # Resources
+    
     st.subheader("🆘 Need Help?")
     st.write("**Crisis Helplines:**")
     st.write("🇮🇳 iCall: 9152987821")
@@ -251,24 +253,24 @@ with st.sidebar:
     
     st.divider()
     
-    # Clear chat
+   
     if st.button("🗑️ Clear Chat"):
         st.session_state.messages = []
         st.session_state.mood_history = []
         st.rerun()
 
-# Main app
+
 st.title("💙 Mental Health Companion")
 st.caption("A safe space to share your thoughts")
 
-# Disclaimer
+#
 with st.expander("⚠️ Important Notice"):
     st.warning("""
     This chatbot is for emotional support only and is NOT a replacement for professional mental health care.
     If you're in crisis, please contact a mental health professional or helpline immediately.
     """)
 
-# Display chat history
+
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
@@ -276,32 +278,32 @@ for message in st.session_state.messages:
             st.caption(f"Detected mood: {message['mood']} {message['emoji']}")
 
 
-# Chat input
+
 if prompt := st.chat_input("Share what's on your mind..."):
-    # Add user message to chat history
+    
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
     
-    # Analyze sentiment using SentimentAnalyzer
+   
     mood, emoji, polarity = sentiment_analyzer.analyze(prompt)
     
-    # Generate AI response using the new generate_response function
+   
     response = generate_response(prompt, mood, st.session_state.messages)
     
-    # Display assistant message
+   
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             st.write(response)
             st.caption(f"Detected mood: {mood} {emoji}")
             
-            # Optionally show a tip if not crisis
+            
             if not sentiment_analyzer.is_crisis(prompt):
                 tips = get_relaxation_tips(mood)
                 with st.expander("💡 Helpful Tip"):
                     st.info(tips[0])
     
-    # Add assistant message to chat history
+    
     st.session_state.messages.append({
         "role": "assistant",
         "content": response,
@@ -311,21 +313,21 @@ if prompt := st.chat_input("Share what's on your mind..."):
 
 
     
-    # Generate response
+    
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             response = generate_response(prompt, mood)
             st.write(response)
             st.caption(f"Detected mood: {mood} {emoji}")
             
-            # Show tip (only if not crisis)
+            
             if not sentiment_analyzer.is_crisis(prompt):
                 tips = get_relaxation_tips(mood)
                 with st.expander("💡 Helpful Tip"):
                     st.info(tips[0])
 
     
-    # Add assistant message
+    
     st.session_state.messages.append({
         "role": "assistant",
         "content": response,
@@ -333,6 +335,6 @@ if prompt := st.chat_input("Share what's on your mind..."):
         "emoji": emoji
     })
 
-# Footer
+
 st.divider()
 st.caption("Made with 💜 for student wellbeing")

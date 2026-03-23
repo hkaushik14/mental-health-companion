@@ -10,7 +10,6 @@ from prompt import PromptBuilder, QUICK_RESPONSES, get_motivational_quote
 from sentiment import SentimentAnalyzer
 
 
-
 sentiment_analyzer = SentimentAnalyzer()
 prompt_builder = PromptBuilder()
 relaxation_exercises = RelaxationExercises()

@@ -62,8 +62,6 @@ streamlit run app.py
 ```
 
 ## Security Notice
-
-* Never commit your `.env` file or API keys to GitHub.
 * If any key is exposed, regenerate it immediately.
 
 ## Usage

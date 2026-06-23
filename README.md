@@ -26,14 +26,12 @@ The Mental Health Companion Chatbot is a supportive AI-powered application desig
 ```
 mental-health-companion/
 │
-├── app.py                # Main Streamlit app
-├── exercise.py           # Relaxation exercises and tips
-├── prompt.py             # Prompt builder for AI responses
-├── sentiment.py          # Sentiment analysis logic
-├── requirements.txt      # Python dependencies
+├── frontend                # Main Streamlit app
+├── backend          # Relaxation exercises and tips
+├── database             # Prompt builder for AI responses
 ├── .gitignore            # Ignore sensitive files like .env
 ├── README.md             # Project documentation
-└── .env                  # API keys (not tracked in GitHub)
+
 ```
 
 ## Setup Instructions
